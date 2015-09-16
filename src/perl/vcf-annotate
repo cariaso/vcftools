@@ -524,7 +524,9 @@ sub annotate
             # Quick position-based check: Is there an annotation for this record?
             if ( !defined $annot_prev_from or $pos < $annot_prev_from )
             {
-                output_line($opts,\@rec);
+                # for promethease we often want only the vcf lines with an ID set.
+                # would be better to make this controlled by a command line switch
+                #output_line($opts,\@rec);
                 next;
             }
             if ( $pos > $annot_prev_to )
@@ -565,7 +567,9 @@ sub annotate
                         my ($r,@a) =  $vcf->normalize_alleles($$annot_line[$ref_col],$alt);
                         if ( exists($ref_alt_pairs{$r.'-'.$a[0]}) ) { $alt_match = 1; last; }
                     }
-                    if ( !$alt_match ) { next; }
+                    # this was causing me to loose 0/0 rows which did not list alternate alleles
+                    # would be better to make this controlled by a command line switch
+                    #if ( !$alt_match ) { next; }
                 }
                 for my $info (@annots)
                 {
